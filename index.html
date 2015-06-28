@@ -1,10 +1,12 @@
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>myMoD Home</title>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -45,10 +47,34 @@ body {
   mapOptions);
 
     }
+    
+        google.maps.event.addDomListener(window, 'load', initialize);
 
-<!-- Allows the user to define the longitude and latitude to mark on the map -->
+</script>
+
+
+
+<script>
+
+<!-- A function to convert a postcode to longitude and latitude if postcode value is present -->
+	
+	$(document).ready(function(){
+		$("#convert").click(function(){
+			$.ajax({url: ("https://api.postcodes.io/postcodes/" + $("#postcode").val() + "?callback=postcode"), success: function(result){
+						$("#resultOut").html(result);
+			}});
+		});
+	});
+
+</script>
+
+
+
+<script>
 
     function pan() {
+	
+	
         var panPoint = new google.maps.LatLng(document.getElementById("lat").value, document.getElementById("lng").value);
         map.panTo(panPoint)
         
@@ -59,21 +85,25 @@ body {
 
 	marker.setMap(map);
      }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
-    
+     
 </script>
 
 
-<script> <!-- A function to clear the form -->
-function cls() {
 
-	<!-- Make this function work! -->
+<script> 
+
+<!-- A function to clear the form -->
+
+function cls() {
+	
+	document.getElementById("myForm").reset();	
 
 }
 </script>
 
+<!--
 
+<script>
 
 function convert() {	
 	
@@ -91,6 +121,8 @@ var request = jQuery.ajax(endpoint, options)
 
 }
 </script>
+
+-->
 
 </head>
 
@@ -130,7 +162,8 @@ var request = jQuery.ajax(endpoint, options)
       <div class="row">
         <div class="col-md-4">
         
-<h4>Where and when were you thinking? (UK only)</h4><br />
+<h4>Please fill in the form below with information about the area that you are looking at, planning to visit, etc. (UK only)</h4>
+<br />
 
 <!-- Form -->
 
@@ -149,11 +182,20 @@ var request = jQuery.ajax(endpoint, options)
     <label for="date">Date:</label>
     <input type="date" class="form-control" id="date">
   </div>
+  <div class="form-group">
+    <label for="radius">Radius (Kilometres):</label>
+    <input type="text" class="form-control" id="radius" placeholder="5">
+  </div>
 
   </div>
   <button type="button" class="btn btn-success" id="button" onclick="pan()">Submit</button>
   <button type="button" class="btn btn-success" id="resetButton" onclick="cls()">Reset form</button>
-  
+  <button type="button" class="btn btn-success" id="convert">Convert Postcode</button>
+  <br />
+  <h5>Converted Postcode data will appear below unfiltered. Please manually extract the Longitude and Latitude values and enter above.</h5>
+
+<p id="resultOut"></p>
+
 </form>
 
 <!-- /form -->
@@ -162,10 +204,11 @@ var request = jQuery.ajax(endpoint, options)
        
         <div class="col-md-8">
 	
-	<div id="googleMap" style="width:auto;height:350px;"></div>
+	<div id="googleMap" style="width:auto;height:500px;"></div>
 
 	  </div>
        </div>
+
 
 <br />
 <hr>
@@ -176,6 +219,7 @@ var request = jQuery.ajax(endpoint, options)
 
 
       <div class="row">     
+      <h3>This function is not currently available, but would present relevant data</h3>
       <h4>On <strong>30/06/3015</strong> the following will be going on in that area:</h4><br />
       
         <div class="col-sm-6">
@@ -260,9 +304,7 @@ var request = jQuery.ajax(endpoint, options)
 <!-- /panels -->
 
 <footer>
-	<p>&copy; l337 Geeks 2015</p>
-	<br />
-	<p>Test data: longitude: -3.956600977658, latitude: 50.5633798534363 Post code: PL20 6SW</p>
+	<p>&copy; The Queen''s own l337 Geeks 2015</p>
 	<br />
 </footer>
 
