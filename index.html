@@ -61,7 +61,10 @@ body {
 	$(document).ready(function(){
 		$("#convert").click(function(){
 			$.ajax({url: ("https://api.postcodes.io/postcodes/" + $("#postcode").val() + "?callback=postcode"), success: function(result){
-						$("#resultOut").html(result);
+						
+						<!--console.log(result);-->
+						$("#lat").val(result.split(",")[8].split(":")[1]);
+						$("#lng").val(result.split(",")[7].split(":")[1]);
 			}});
 		});
 	});
@@ -172,11 +175,14 @@ var request = jQuery.ajax(endpoint, options)
   <div class="form-group">
     <label for="location">Location:</label> 
     <p>Please enter either Latitude and Longitude</p>
-    <input type="text" class="form-control" id="lat" placeholder="Latitude"> <br />
+    <input type="text" class="form-control" id="lat" placeholder="Latitude" autofocus> <br />
     <input type="text" class="form-control" id="lng" placeholder="Longitude">
 <br />
-    <p>Or Postcode (with no space)</p>
+    <p>Or Convert a Postcode (with no space)</p>
     <input type="text" class="form-control" id="postcode" placeholder="SW1A2QH">
+    <br/>
+    <button type="button" class="btn btn-success" id="convert">Convert Postcode</button>
+    <br/>
 <br />
   <div class="form-group">
     <label for="date">Date:</label>
@@ -190,11 +196,7 @@ var request = jQuery.ajax(endpoint, options)
   </div>
   <button type="button" class="btn btn-success" id="button" onclick="pan()">Submit</button>
   <button type="button" class="btn btn-success" id="resetButton" onclick="cls()">Reset form</button>
-  <button type="button" class="btn btn-success" id="convert">Convert Postcode</button>
   <br />
-  <h5>Converted Postcode data will appear below unfiltered. Please manually extract the Longitude and Latitude values and enter above.</h5>
-
-<p id="resultOut"></p>
 
 </form>
 
